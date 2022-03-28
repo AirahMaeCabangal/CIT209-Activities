@@ -1,0 +1,72 @@
+#include <LiquidCrystal.h> // includes the LiquidCrystal Library 
+
+LiquidCrystal lcd(1, 2, 4, 5, 6, 7); // Creates an LCD object. 
+
+int red=11;
+int yellow=10;
+int green=9;
+int trigPin= 12;
+int echoPin= 13;
+int speaker1=8;
+long duration;
+float cm;
+
+void setup(){
+  lcd.begin (16, 2);
+  pinMode(11, OUTPUT);//LED RED
+  pinMode(10, OUTPUT);//LED YELLOW
+  pinMode(9, OUTPUT);//LED GREEN
+  pinMode(speaker1, OUTPUT);//BUZZER
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
+  }
+  
+void loop(){
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+             
+  duration = pulseIn(echoPin, HIGH);
+  
+  cm=duration/ 58.8;
+ 
+  if(cm<10){
+    digitalWrite(red, HIGH);
+    digitalWrite(yellow, LOW);
+    digitalWrite(green, LOW);
+    lcd.setCursor(4, 0);
+    lcd.print("Distance");
+    lcd.setCursor(4, 1);
+    lcd.print(cm);
+    lcd.print(" cm");
+    tone(speaker1,1000);
+  }
+  
+ if(cm>10 && cm<20){
+    digitalWrite(red, LOW);
+    digitalWrite(yellow, HIGH);
+    digitalWrite(green, LOW);
+    lcd.setCursor(4, 0);
+    lcd.print("Distance");
+    lcd.setCursor(4, 1);
+    lcd.print(cm);
+    lcd.print(" cm");
+    noTone(speaker1);   
+  }
+  
+  if(cm >20){
+    digitalWrite(red, LOW);
+    digitalWrite(yellow, LOW);
+    digitalWrite(green, HIGH);
+    lcd.setCursor(4, 0);
+    lcd.print("Distance");
+    lcd.setCursor(4, 1);
+    lcd.print(cm);
+    lcd.print(" cm");
+    noTone(speaker1);
+  }
+  delay (1000);
+   }
